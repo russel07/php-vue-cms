@@ -21,11 +21,12 @@ if(isset($_REQUEST) && ($_SERVER['REQUEST_METHOD'] === 'PUT')) {
         exit;
     }
     $putdata = json_decode(file_get_contents("php://input"), true);
+
     $data = array(
-        'id' => $putdata->id,
-        'page_title' => $putdata->page_title,
-        'page_content' => $putdata->page_content,
-        'page_status' => $putdata->page_status
+        'id' => $putdata['id'],
+        'page_title' => $putdata['page_title'],
+        'page_content' => $putdata['page_content'],
+        'page_status' => $putdata['page_status']
     );
 
     $validate = $home->validatePageForm($data);

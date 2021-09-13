@@ -21,9 +21,9 @@ export default {
                         <td>{{page.page_title}}</td>
                         <td>{{page.page_status}}</td>
                         <td width='20%'>
-                            <a class='btn btn-outline-warning page' href="'#/admin/view/'">View</a>
-                            <button class='btn btn-outline-info page' >Edit</button>
-                            <button class='btn btn-outline-danger delete-page' >Delete</button>
+                            <a class='btn btn-outline-warning page' :href="'#/admin/view/'+page.id">View</a>
+                            <a class='btn btn-outline-info page' :href="'#/admin/edit/'+page.id">Edit</a>
+                            <button class='btn btn-outline-danger delete-page' @click="deletePage(page.id)">Delete</button>
                         </td>
                     </tr>
                 </tbody>
@@ -53,6 +53,29 @@ export default {
                     console.log(error);
                 });
         },
+        deletePage: function(id){
+            if(confirm("Are you sure?")){
+                var root = this;
+                axios.delete('api/delete-page.php?page='+id)
+                    .then(function (response) {
+                        if(response.data.status){
+                            let index = root.pages.findIndex(row => row.id === id);
+                            root.pages.splice(index, 1);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+
+                return true;
+            }else return false;
+        },
+    },
+    mounted () {
+        let user = JSON.parse(localStorage.getItem("user"));
+        if(!user){
+            router.push({name: 'Login'})
+        }
     }
 
 }

@@ -25,7 +25,7 @@ export default {
                     </div>
                 </li>
 
-                <li class="nav-item active"  v-if="!loggedIn">
+                <li class="nav-item active"  v-if="needLogin">
                     <a class="nav-link page" href="#/login">Admin?</a>
                 </li>
 
@@ -37,22 +37,28 @@ export default {
     data () {
         return {
             loggedIn:false,
-            username: ''
+            username: '',
+            needLogin: true
         }
     },
     created: function () {
-        console.log("login page");
+        console.log("Nav bar");
     },
     methods: {
         logout () {
             localStorage.removeItem('user')
-            this.loggedIn = '';
+            this.loggedIn = false;
+            this.needLogin = true;
             router.push({name: 'default'})
         }
     },
     mounted () {
-        console.log("Nav");
-        this.loggedIn = localStorage.removeItem('user')
+        let user = JSON.parse(localStorage.getItem("user"));
+        if(user){
+            this.loggedIn = true;
+            this.username = user.name;
+            this.needLogin = false;
+        }
     }
 
 }

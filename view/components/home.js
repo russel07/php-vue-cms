@@ -14,7 +14,7 @@ export default {
                     <h1>{{page.page_title}}</h1>
                 </div>
                 <div class="card-body">
-                    <p>{{page.page_content}}</p>
+                    <div v-html="page.page_content"></div>
                 </div>
             </div>
 

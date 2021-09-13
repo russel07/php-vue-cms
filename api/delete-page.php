@@ -20,8 +20,7 @@ if(isset($_REQUEST) && ($_SERVER['REQUEST_METHOD'] === 'DELETE')) {
         exit;
     }
 
-    $putdata = json_decode(file_get_contents("php://input"), TRUE);
-    $pageId = $putdata->id;
+    $pageId = (isset($_GET['page']) && !empty($_GET['page'])) ? $_GET['page']: '';
 
     $delete = $home->deletePage($pageId);
     echo json_encode(array(
