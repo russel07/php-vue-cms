@@ -1,4 +1,5 @@
 import router from '../router/router.js';
+import EventBus from './event-bus.js';
 
 export default {
     template: `
@@ -43,6 +44,14 @@ export default {
     },
     created: function () {
         console.log("Nav bar");
+        
+        let user = JSON.parse(localStorage.getItem("user"));
+        if(user){
+            this.loggedIn = true;
+            this.username = user.name;
+            this.needLogin = false;
+            console.log("user name in created "+ this.username);
+        }
     },
     methods: {
         logout () {
@@ -52,13 +61,13 @@ export default {
             router.push({name: 'default'})
         }
     },
-    mounted () {
-        let user = JSON.parse(localStorage.getItem("user"));
-        if(user){
-            this.loggedIn = true;
-            this.username = user.name;
-            this.needLogin = false;
-        }
-    }
+    mounted () { 
+        var self = this;
+        EventBus.$on('IS_LOGGEDIN', function (_user) {
+            self.loggedIn = true;
+            self.username = _user.name;
+            self.needLogin = false;
+        });
+    }   
 
 }

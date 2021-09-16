@@ -1,4 +1,5 @@
 import router from '../router/router.js';
+import EventBus from './event-bus.js';
 
 export default {
     template: `
@@ -50,6 +51,7 @@ export default {
             axios.post('api/login.php', data)
                 .then(function (response) {
                     if(response.data.status) {
+                        EventBus.$emit('IS_LOGGEDIN', response.data.user);
                         localStorage.setItem('user', JSON.stringify(response.data.user));
                         router.push({name: 'Admin'})
                     }
@@ -59,6 +61,11 @@ export default {
                     console.log(error);
                 });
         }
+    },
+    mounted () {
+        let user = JSON.parse(localStorage.getItem("user"));
+        if(user){
+            router.push({name: 'Admin'})
+        }
     }
-
 }
